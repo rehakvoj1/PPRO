@@ -2,5 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Word.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Riddle.cpp" />
+    <ClCompile Include="src\User.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Word.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Riddle.h" />
+    <ClInclude Include="src\User.h" />
   </ItemGroup>
 </Project>
