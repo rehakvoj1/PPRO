@@ -5,6 +5,12 @@
 
 class Riddle {
 public:
+    Riddle( std::string riddle, std::string lang, std::string answer ) :
+        m_riddle( riddle ),
+        m_lang( lang ),
+        m_answer( answer ) 
+    {}
+
 
     template<class Action>
     void persist( Action& a ) {

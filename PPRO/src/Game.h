@@ -7,6 +7,10 @@ class Score;
 
 class Game {
 public:
+    Game( std::string name, std::string desc) :
+        m_name( name ),
+        m_desc( desc )
+    {}
     
     template<class Action>
     void persist( Action& a ) {

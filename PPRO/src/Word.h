@@ -8,6 +8,12 @@ class Score;
 class Word {
 public:
    
+    Word(std::string word, std::string lang) : 
+        m_word( word ), 
+        m_lang( lang ), 
+        m_len( word.length() )
+    {}
+
     template<class Action>
     void persist( Action& a ) {
         Wt::Dbo::field( a, m_word, "word" );

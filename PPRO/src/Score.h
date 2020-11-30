@@ -10,6 +10,13 @@
 class Score {
 public:
   
+    Score( std::unique_ptr<Game> game, std::unique_ptr<User> user, std::unique_ptr<Word> word ) : 
+        m_guessCnt( 0 ),
+        m_game( std::move(game) ),
+        m_user( std::move(user) ),
+        m_word( std::move(word) )
+    { }
+
     template<class Action>
     void persist( Action& a ) {
         Wt::Dbo::field( a, m_guessCnt, "guessCount" );
