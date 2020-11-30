@@ -3,12 +3,13 @@
 #include <Wt/Dbo/Dbo.h>
 #include <string>
 
-class Score;
+class Word;
+#include "Score.h"
 
 class Word {
 public:
    
-    Word(std::string word, std::string lang) : 
+    Word( std::string word = "", std::string lang = "" ) : 
         m_word( word ), 
         m_lang( lang ), 
         m_len( word.length() )
@@ -29,4 +30,5 @@ private:
     Wt::Dbo::collection< Wt::Dbo::ptr<Score> > m_scores;
 
 };
+
 

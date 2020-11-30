@@ -3,7 +3,9 @@
 #include <Wt/WGlobal.h>
 #include <Wt/Dbo/Dbo.h>
 
-class Score;
+class User;
+#include "Score.h"
+
 
 class User {
 public:

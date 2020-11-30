@@ -3,11 +3,13 @@
 #include <Wt/Dbo/Dbo.h>
 #include <string>
 
-class Score;
+class Game;
+#include "Score.h"
 
 class Game {
 public:
-    Game( std::string name, std::string desc) :
+
+    Game( std::string name = "", std::string desc = "" ) :
         m_name( name ),
         m_desc( desc )
     {}

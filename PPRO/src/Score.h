@@ -3,14 +3,16 @@
 #include <Wt/Dbo/Dbo.h>
 #include <string>
 
+class Score;
 #include "Game.h"
 #include "User.h"
 #include "Word.h"
 
+
 class Score {
 public:
-  
-    Score( std::unique_ptr<Game> game, std::unique_ptr<User> user, std::unique_ptr<Word> word ) : 
+
+    Score( std::unique_ptr<Game> game = nullptr, std::unique_ptr<User> user = nullptr, std::unique_ptr<Word> word = nullptr ) : 
         m_guessCnt( 0 ),
         m_game( std::move(game) ),
         m_user( std::move(user) ),
@@ -31,4 +33,5 @@ private:
     Wt::Dbo::ptr<User> m_user;
     Wt::Dbo::ptr<Word> m_word;
 };
+
 
