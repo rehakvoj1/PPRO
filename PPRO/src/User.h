@@ -1,19 +1,17 @@
 #pragma once
 #include <Wt/Dbo/Types.h>
 #include <Wt/WGlobal.h>
+#include <Wt/Dbo/Dbo.h>
 
-namespace dbo = Wt::Dbo;
-
-class User;
-using AuthInfo = Wt::Auth::Dbo::AuthInfo<User>;
+class Score;
 
 class User {
 public:
+	
 	template<class Action>
 	void persist( Action& a ) {
+		Wt::Dbo::hasMany( a, m_scores, Wt::Dbo::ManyToOne, "user" );
 	}
 private:
-
+	Wt::Dbo::collection< Wt::Dbo::ptr<Score> > m_scores;
 };
-
-DBO_EXTERN_TEMPLATES( User )

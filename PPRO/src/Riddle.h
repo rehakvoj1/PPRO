@@ -8,9 +8,9 @@ public:
 
     template<class Action>
     void persist( Action& a ) {
-        dbo::field( a, m_riddle, "riddle" );
-        dbo::field( a, m_lang, "language" );
-        dbo::field( a, m_answer, "answer" );
+        Wt::Dbo::field( a, m_riddle, "riddle" );
+        Wt::Dbo::field( a, m_lang, "language" );
+        Wt::Dbo::field( a, m_answer, "answer" );
     }
 
 private:
