@@ -33,6 +33,19 @@ WebGamesApp::WebGamesApp() {
 
 void WebGamesApp::onAuthEvent() {
     if ( m_session.login().loggedIn() ) {
-        } else {
+        Wt::Dbo::ptr<User> pPotentialNewUser = nullptr;
+        Wt::WString loggedUserName;
+        
+        {
+            Wt::Dbo::Transaction transaction{ m_session };
+            loggedUserName = m_session.login().user().identity(Wt::Auth::Identity::LoginName);
+            pPotentialNewUser = m_session.find<User>().where( "name = ?" ).bind( loggedUserName.toUTF8() );
+        }
+
+        if ( !pPotentialNewUser ) {
+            Wt::Dbo::Transaction transaction{ m_session };
+            std::unique_ptr<User> user{ new User( loggedUserName.toUTF8() ) };
+            m_session.add( std::move( user ) );   
+        }
     }
 }
