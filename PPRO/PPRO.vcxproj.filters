@@ -7,6 +7,8 @@
     <ClCompile Include="src\Riddle.cpp" />
     <ClCompile Include="src\User.cpp" />
     <ClCompile Include="src\Score.cpp" />
+    <ClCompile Include="src\Session.cpp" />
+    <ClCompile Include="src\WebGamesApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Word.h" />
@@ -14,5 +16,7 @@
     <ClInclude Include="src\Riddle.h" />
     <ClInclude Include="src\User.h" />
     <ClInclude Include="src\Score.h" />
+    <ClInclude Include="src\Session.h" />
+    <ClInclude Include="src\WebGamesApp.h" />
   </ItemGroup>
 </Project>
