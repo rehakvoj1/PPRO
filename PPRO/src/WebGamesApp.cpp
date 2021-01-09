@@ -9,9 +9,10 @@
 #include <Wt/Auth/AuthWidget.h>
 #include <Wt/Auth/PasswordService.h>
 #include <Wt/Auth/RegistrationModel.h>
+#include <Wt/WLink.h>
 
 WebGamesApp::WebGamesApp() {
-    m_session.login().changed().connect( this, &WebGamesApp::onAuthEvent );
+    m_session.login().changed().connect( this, &WebGamesApp::OnAuthEvent );
 
     std::unique_ptr<Wt::Auth::AuthModel> authModel
         = std::make_unique<Wt::Auth::AuthModel>( Session::Auth(), m_session.GetUsers() );
@@ -22,16 +23,45 @@ WebGamesApp::WebGamesApp() {
     auto authWidgetPtr = authWidget.get();
     authWidget->setModel( std::move( authModel ) );
     authWidget->setRegistrationEnabled( true );
-
-    std::unique_ptr<Wt::WText> title( std::make_unique<Wt::WText>( "<h1>A Witty game: Hangman</h1>" ) );
-    addWidget( std::move( title ) );
+  
+    m_mainStack = new Wt::WStackedWidget();
+  
+    std::unique_ptr<Wt::WContainerWidget> m_links = std::make_unique<Wt::WContainerWidget>();
+    m_links->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/hangman" ) , "hangman" ) );
+    m_links->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/bullsAndCows" ) , "bullsAndCows" ) );
+    m_links->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/riddles" ) , "riddles" ) );
+    m_links->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/guessTheSong" ) , "guessTheSong" ) );
+    Wt::WContainerWidget* widget = m_mainStack->addWidget( std::move( m_links ) );
+    
+    m_mainStack->hide();
 
     addWidget( std::move( authWidget ) );
+    addWidget( std::unique_ptr<Wt::WStackedWidget>( m_mainStack ) );
+
+    Wt::WApplication::instance()->internalPathChanged().connect( this, &WebGamesApp::HandleInternalPath );
     authWidgetPtr->processEnvironment();
 }
 
+void WebGamesApp::HandleInternalPath( const std::string& internalPath ) {
+    if ( m_session.login().loggedIn() ) {
+        if ( internalPath == "/list" ) {
+            ShowGameList();
+        } else if ( internalPath == "/bullsAndCows" ) {
 
-void WebGamesApp::onAuthEvent() {
+        } else if ( internalPath == "/riddles" ) {
+
+        } else if ( internalPath == "/guessTheSong" ) {
+
+        } else if ( internalPath == "/hangman" ) {
+
+        } else {
+            Wt::WApplication::instance()->setInternalPath( "/list", true );
+        }
+    }
+}
+
+
+void WebGamesApp::OnAuthEvent() {
     if ( m_session.login().loggedIn() ) {
         Wt::Dbo::ptr<User> pPotentialNewUser = nullptr;
         Wt::WString loggedUserName;
@@ -47,5 +77,11 @@ void WebGamesApp::onAuthEvent() {
             std::unique_ptr<User> user{ new User( loggedUserName.toUTF8() ) };
             m_session.add( std::move( user ) );   
         }
+
+        HandleInternalPath( Wt::WApplication::instance()->internalPath() );
     }
+}
+
+void WebGamesApp::ShowGameList() {
+    m_mainStack->show();
 }
