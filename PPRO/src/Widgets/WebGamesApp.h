@@ -2,7 +2,7 @@
 
 #include <Wt/WContainerWidget.h>
 #include <Wt/WStackedWidget.h>
-#include "Session.h"
+#include "../Session.h"
 
 	
 class WebGamesApp : public Wt::WContainerWidget {
@@ -13,9 +13,14 @@ public:
 
 private:
 	void OnAuthEvent();
-	void ShowGameList();
+	void ShowPage(Wt::WContainerWidget* app);
 
 	Wt::WStackedWidget* m_mainStack;
+	Wt::WContainerWidget* m_gameList;
+	Wt::WContainerWidget* m_hangman;
+	Wt::WContainerWidget* m_bullCows;
+	Wt::WContainerWidget* m_riddles;
+	Wt::WContainerWidget* m_guessSong;
 	Session m_session;
 };
 

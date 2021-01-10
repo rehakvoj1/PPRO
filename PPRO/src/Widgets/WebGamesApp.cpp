@@ -25,14 +25,15 @@ WebGamesApp::WebGamesApp() {
     authWidget->setRegistrationEnabled( true );
   
     m_mainStack = new Wt::WStackedWidget();
+    m_gameList = new Wt::WContainerWidget();
+    //TODO Instantiate Widget of Games
   
-    std::unique_ptr<Wt::WContainerWidget> m_links = std::make_unique<Wt::WContainerWidget>();
-    m_links->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/hangman" ) , "hangman" ) );
-    m_links->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/bullsAndCows" ) , "bullsAndCows" ) );
-    m_links->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/riddles" ) , "riddles" ) );
-    m_links->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/guessTheSong" ) , "guessTheSong" ) );
-    Wt::WContainerWidget* widget = m_mainStack->addWidget( std::move( m_links ) );
+    m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/hangman" ) , "hangman" ) );
+    m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/bullsAndCows" ) , "bullsAndCows" ) );
+    m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/riddles" ) , "riddles" ) );
+    m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/guessTheSong" ) , "guessTheSong" ) );
     
+    m_mainStack->addWidget( std::unique_ptr<WContainerWidget>( m_gameList ) );
     m_mainStack->hide();
 
     addWidget( std::move( authWidget ) );
@@ -45,15 +46,15 @@ WebGamesApp::WebGamesApp() {
 void WebGamesApp::HandleInternalPath( const std::string& internalPath ) {
     if ( m_session.login().loggedIn() ) {
         if ( internalPath == "/list" ) {
-            ShowGameList();
+            ShowPage( m_gameList );
         } else if ( internalPath == "/bullsAndCows" ) {
-
+            ShowPage( m_bullCows );
         } else if ( internalPath == "/riddles" ) {
-
+            ShowPage( m_riddles );
         } else if ( internalPath == "/guessTheSong" ) {
-
+            ShowPage( m_guessSong );
         } else if ( internalPath == "/hangman" ) {
-
+            ShowPage( m_hangman );
         } else {
             Wt::WApplication::instance()->setInternalPath( "/list", true );
         }
@@ -82,6 +83,7 @@ void WebGamesApp::OnAuthEvent() {
     }
 }
 
-void WebGamesApp::ShowGameList() {
+void WebGamesApp::ShowPage(Wt::WContainerWidget* app) {
+    m_mainStack->setCurrentWidget(app);
     m_mainStack->show();
 }

@@ -1,5 +1,5 @@
 #include "Session.h"
-#include "Riddle.h"
+#include "DAO/Riddle.h"
 
 #include "Wt/Auth/AuthService.h"
 #include "Wt/Auth/HashFunction.h"

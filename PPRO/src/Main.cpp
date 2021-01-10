@@ -6,12 +6,12 @@
 
 #include "Session.h"
 
-#include "Game.h"
-#include "Riddle.h"
-#include "Score.h"
-#include "User.h"
-#include "Word.h"
-#include "WebGamesApp.h"
+#include "DAO/Game.h"
+#include "DAO/Riddle.h"
+#include "DAO/Score.h"
+#include "DAO/User.h"
+#include "DAO/Word.h"
+#include "Widgets/WebGamesApp.h"
 
 
 

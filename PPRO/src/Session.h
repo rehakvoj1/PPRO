@@ -6,7 +6,7 @@
 #include <Wt/Dbo/backend/Sqlite3.h>
 #include <Wt/Auth/Dbo/UserDatabase.h>
 
-#include "User.h"
+#include "DAO/User.h"
 
 using UserDatabase = Wt::Auth::Dbo::UserDatabase<AuthInfo>;
 
