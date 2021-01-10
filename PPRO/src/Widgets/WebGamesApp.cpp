@@ -11,6 +11,11 @@
 #include <Wt/Auth/RegistrationModel.h>
 #include <Wt/WLink.h>
 
+#include "BullsNCowsGame.h"
+#include "HangmanGame.h"
+#include "GuessTheSongGame.h"
+#include "RiddlesGame.h"
+
 WebGamesApp::WebGamesApp() {
     m_session.login().changed().connect( this, &WebGamesApp::OnAuthEvent );
 
@@ -26,7 +31,10 @@ WebGamesApp::WebGamesApp() {
   
     m_mainStack = new Wt::WStackedWidget();
     m_gameList = new Wt::WContainerWidget();
-    //TODO Instantiate Widget of Games
+    m_bullCows = new BullsNCowsGame();
+    m_hangman = new HangmanGame();
+    m_riddles = new RiddlesGame();
+    m_guessSong = new GuessTheSongGame();
   
     m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/hangman" ) , "hangman" ) );
     m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/bullsAndCows" ) , "bullsAndCows" ) );
@@ -34,6 +42,11 @@ WebGamesApp::WebGamesApp() {
     m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/guessTheSong" ) , "guessTheSong" ) );
     
     m_mainStack->addWidget( std::unique_ptr<WContainerWidget>( m_gameList ) );
+    m_mainStack->addWidget( std::unique_ptr<WContainerWidget>( m_bullCows ) );
+    m_mainStack->addWidget( std::unique_ptr<WContainerWidget>( m_riddles ) );
+    m_mainStack->addWidget( std::unique_ptr<WContainerWidget>( m_guessSong ) );
+    m_mainStack->addWidget( std::unique_ptr<WContainerWidget>( m_hangman ) );
+
     m_mainStack->hide();
 
     addWidget( std::move( authWidget ) );
@@ -41,6 +54,16 @@ WebGamesApp::WebGamesApp() {
 
     Wt::WApplication::instance()->internalPathChanged().connect( this, &WebGamesApp::HandleInternalPath );
     authWidgetPtr->processEnvironment();
+}
+
+WebGamesApp::~WebGamesApp() {
+    delete m_mainStack;
+    delete m_gameList;
+    delete m_guessSong;
+    delete m_hangman;
+    delete m_riddles;
+    delete m_bullCows;
+
 }
 
 void WebGamesApp::HandleInternalPath( const std::string& internalPath ) {

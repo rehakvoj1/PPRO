@@ -37,6 +37,8 @@ void FillDB() {
 std::unique_ptr<Wt::WApplication> createApplication( const Wt::WEnvironment& env ) {
 	auto app = std::make_unique<Wt::WApplication>( env );
 	app->setCssTheme( "polished" );
+//	app->setLocale( "cs" );
+	app->messageResourceBundle().use( "letters" );
 	app->root()->addWidget( std::make_unique<WebGamesApp>() );
 
 	return app;

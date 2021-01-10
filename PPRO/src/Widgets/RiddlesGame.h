@@ -2,5 +2,10 @@
 #include <Wt/WContainerWidget.h>
 
 class RiddlesGame : public Wt::WContainerWidget {
+public:
+	RiddlesGame();
+
+private:
+
 };
 

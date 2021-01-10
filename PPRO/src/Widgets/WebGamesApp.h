@@ -8,6 +8,7 @@
 class WebGamesApp : public Wt::WContainerWidget {
 public:
 	WebGamesApp();
+	~WebGamesApp();
 
 	void HandleInternalPath( const std::string& internalPath );
 
