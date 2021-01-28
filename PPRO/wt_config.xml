@@ -1,0 +1,7 @@
+<server>
+    <application-settings location="*">
+        <session-management>
+            <reload-is-new-session>false</reload-is-new-session>
+        </session-management>
+    </application-settings>
+</server>

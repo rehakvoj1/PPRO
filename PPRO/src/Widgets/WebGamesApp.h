@@ -18,10 +18,7 @@ private:
 
 	Wt::WStackedWidget* m_mainStack;
 	Wt::WContainerWidget* m_gameList;
-	Wt::WContainerWidget* m_hangman;
-	Wt::WContainerWidget* m_bullCows;
-	Wt::WContainerWidget* m_riddles;
-	Wt::WContainerWidget* m_guessSong;
+	std::map<std::string, Wt::WContainerWidget*> m_gamesPtrs;
 	Session m_session;
 };
 

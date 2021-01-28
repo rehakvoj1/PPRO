@@ -4,12 +4,15 @@
 #include <Wt/WStackedWidget.h>
 #include <vector>
 
+class WebGamesApp;
+
 class HangmanGame : public Wt::WContainerWidget {
 public:
-	HangmanGame();
+	HangmanGame(WebGamesApp* app);
 
 private:
 	Wt::WStackedWidget* m_hangmanImg;
 	std::vector<Wt::WImage*> m_images;
+	WebGamesApp* m_app;
 };
 
