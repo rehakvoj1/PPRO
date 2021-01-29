@@ -2,6 +2,7 @@
 #include <Wt/WServer.h>
 #include <Wt/Dbo/Dbo.h>
 #include <Wt/Dbo/backend/Sqlite3.h>
+#include <fstream>
 
 
 #include "Session.h"
@@ -14,31 +15,26 @@
 #include "Widgets/WebGamesApp.h"
 
 
-
-void CreateDB() {
-	std::unique_ptr<Wt::Dbo::backend::Sqlite3> sqlite3 = std::make_unique<Wt::Dbo::backend::Sqlite3>( "ppro.db" );
-	sqlite3->setProperty( "show-queries", "true" );
-	Wt::Dbo::Session session;
-	session.setConnection( std::move( sqlite3 ) );
-
-	session.mapClass<Game>( "game" );
-	session.mapClass<Riddle>( "riddle" );
-	session.mapClass<Score>( "score" );
-	session.mapClass<User>( "user" );
-	session.mapClass<Word>( "word" );
-
-	session.createTables();
-}
-
 void FillDB() {
-
+	Session session;
+	Wt::Dbo::Transaction transaction{ session };
+	
+	std::ifstream file( "nouns.txt" );
+	std::string str;
+	while ( std::getline( file, str ) ) {
+		std::unique_ptr<Word> word{ new Word(str, "en") };
+		Wt::Dbo::ptr<Word> wordPtr = session.add( std::move( word ) );
+	}
 }
+
+
 
 std::unique_ptr<Wt::WApplication> createApplication( const Wt::WEnvironment& env ) {
 	auto app = std::make_unique<Wt::WApplication>( env );
-	app->setCssTheme( "polished" );
-//	app->setLocale( "cs" );
+	app->setCssTheme( "bootstrap" );
+	app->useStyleSheet( "css/hangman.css" );
 	app->messageResourceBundle().use( "letters" );
+	app->messageResourceBundle().use( "nouns" );
 	app->root()->addWidget( std::make_unique<WebGamesApp>() );
 
 	return app;
@@ -47,7 +43,6 @@ std::unique_ptr<Wt::WApplication> createApplication( const Wt::WEnvironment& env
 
 int main( int argc, char** argv ) {
 
-	//CreateDB();
 	//FillDB();
 	Session::ConfigureAuth();
 	try {
@@ -58,6 +53,7 @@ int main( int argc, char** argv ) {
 		Session::ConfigureAuth();
 
 		server.run();
+
 	}
 	catch ( Wt::WServer::Exception& e ) {
 		std::cerr << e.what() << std::endl;

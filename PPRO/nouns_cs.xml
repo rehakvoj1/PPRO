@@ -1,4 +1,6 @@
-abakus
+<?xml version="1.0" encoding="utf-8"?>
+<messages>
+  <message id="hangman.nouns">abakus
 abatyše
 abazština
 abdikace
@@ -23216,4 +23218,5 @@ zygota
 žvanilka
 žvást
 žvejka
-žvýkačka
+žvýkačka</message>
+</messages>

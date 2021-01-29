@@ -1,4 +1,5 @@
 #include "WebGamesApp.h"
+#include <random>
 
 #include <Wt/WAnchor.h>
 #include <Wt/WText.h>
@@ -78,7 +79,7 @@ void WebGamesApp::HandleInternalPath( const std::string& internalPath ) {
             newWidget = new GuessTheSongGame();
 
         } else if ( internalPath == "/hangman" ) {
-            newWidget = new HangmanGame(this);
+            newWidget = new HangmanGame(this, &m_session);
 
         } else {
             Wt::WApplication::instance()->setInternalPath( "/list", true );
@@ -89,6 +90,13 @@ void WebGamesApp::HandleInternalPath( const std::string& internalPath ) {
         m_mainStack->addWidget( std::unique_ptr<WContainerWidget>( m_gamesPtrs[newWidget->id()] ) );
         ShowPage( m_gamesPtrs[newWidget->id()] );
     }
+}
+
+int WebGamesApp::GetRandomInt(size_t max) {
+    std::random_device rd;
+    std::mt19937 gen( rd() );
+    std::uniform_int_distribution<size_t> distrib( 0, max );
+    return static_cast<int>( distrib( gen ) );
 }
 
 

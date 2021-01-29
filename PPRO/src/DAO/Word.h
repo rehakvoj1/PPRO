@@ -23,7 +23,6 @@ public:
         Wt::Dbo::hasMany( a, m_scores, Wt::Dbo::ManyToOne, "word" );
     }
 
-private:
 	std::string m_word;
 	std::string m_lang;
 	int         m_len;
