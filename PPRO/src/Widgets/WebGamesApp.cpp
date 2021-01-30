@@ -49,8 +49,6 @@ WebGamesApp::WebGamesApp() {
 }
 
 WebGamesApp::~WebGamesApp() {
-    delete m_mainStack;
-    delete m_gameList;
 }
 
 void WebGamesApp::HandleInternalPath( const std::string& internalPath ) {
@@ -70,16 +68,16 @@ void WebGamesApp::HandleInternalPath( const std::string& internalPath ) {
             return;
 
         } else if ( internalPath == "/bullsAndCows" ) {
-            newWidget = new BullsNCowsGame();
+            newWidget = new BullsNCowsGame( this, &m_session );
 
         } else if ( internalPath == "/riddles" ) {
-            newWidget = new RiddlesGame(this, &m_session);
+            newWidget = new RiddlesGame( this, &m_session );
 
         } else if ( internalPath == "/guessTheSong" ) {
             newWidget = new GuessTheSongGame();
 
         } else if ( internalPath == "/hangman" ) {
-            newWidget = new HangmanGame(this, &m_session);
+            newWidget = new HangmanGame( this, &m_session );
 
         } else {
             Wt::WApplication::instance()->setInternalPath( "/list", true );
@@ -92,11 +90,11 @@ void WebGamesApp::HandleInternalPath( const std::string& internalPath ) {
     }
 }
 
-int WebGamesApp::GetRandomInt(size_t max) {
+size_t WebGamesApp::GetRandomInt(size_t max) {
     std::random_device rd;
     std::mt19937 gen( rd() );
-    std::uniform_int_distribution<size_t> distrib( 0, max );
-    return static_cast<int>( distrib( gen ) );
+    std::uniform_int_distribution<size_t> distrib( 1, max );
+    return distrib( gen );
 }
 
 

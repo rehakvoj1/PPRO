@@ -42,8 +42,8 @@ std::unique_ptr<Wt::WApplication> createApplication( const Wt::WEnvironment& env
 	app->setCssTheme( "bootstrap" );
 	app->useStyleSheet( "css/hangman.css" );
 	app->useStyleSheet( "css/riddles.css" );
+	app->useStyleSheet( "css/bullsNCows.css" );
 	app->messageResourceBundle().use( "letters" );
-	app->messageResourceBundle().use( "nouns" );
 	app->root()->addWidget( std::make_unique<WebGamesApp>() );
 
 	return app;

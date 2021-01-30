@@ -11,7 +11,7 @@ public:
 	~WebGamesApp();
 
 	void HandleInternalPath( const std::string& internalPath );
-	int GetRandomInt( size_t max);
+	size_t GetRandomInt( size_t max);
 
 private:
 	void OnAuthEvent();

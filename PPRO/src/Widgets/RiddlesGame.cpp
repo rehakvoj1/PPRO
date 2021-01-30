@@ -15,8 +15,10 @@ RiddlesGame::RiddlesGame( WebGamesApp* app, Session* session ) : m_app( app ), m
 	
 	addWidget( std::move( title ) );
 	addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/list" ), "list" ) );
+	addWidget( std::make_unique<Wt::WBreak>() );
 	
 	auto btnNewGame = std::make_unique<Wt::WPushButton>( "New Game" );
+	btnNewGame->enterPressed().connect( std::bind( &RiddlesGame::NewGame, this ) );
 	btnNewGame->clicked().connect( std::bind( &RiddlesGame::NewGame, this ) );
 	addWidget( std::move( btnNewGame ) );
 
@@ -30,6 +32,7 @@ RiddlesGame::RiddlesGame( WebGamesApp* app, Session* session ) : m_app( app ), m
 	addWidget( std::make_unique<Wt::WBreak>() );
 	
 	m_userInput = new Wt::WLineEdit();
+	m_userInput->enterPressed().connect( std::bind( &RiddlesGame::CheckAnswer, this ) );
 	m_userInput->clicked().connect( [&] {
 		if ( m_userInput->hasStyleClass( "inputWrong" ) ) {
 			m_userInput->removeStyleClass( "inputWrong" );
@@ -43,8 +46,7 @@ RiddlesGame::RiddlesGame( WebGamesApp* app, Session* session ) : m_app( app ), m
 	auto btnOK = std::make_unique<Wt::WPushButton>("OK");
 	btnOK->clicked().connect( std::bind( &RiddlesGame::CheckAnswer, this ) );
 	addWidget( std::move( btnOK ) );
-	this->enterPressed().connect( std::bind( &RiddlesGame::CheckAnswer, this ) );
-
+	
 	auto btnSolution = std::make_unique<Wt::WPushButton>("Show Solution");
 	btnSolution->clicked().connect( std::bind( &RiddlesGame::ToggleSolution, this ) );
 	addWidget( std::move( btnSolution ) );
@@ -71,8 +73,13 @@ void RiddlesGame::NewRandomRiddle() {
 	typedef Wt::Dbo::collection< Wt::Dbo::ptr<Riddle> > Riddles;
 	Riddles riddles = m_session->find<Riddle>();
 
-	int random = m_app->GetRandomInt( riddles.size() );
-	Wt::Dbo::ptr<Riddle> riddle = m_session->find<Riddle>().where( "id = ?" ).bind( random );
+	size_t random = m_app->GetRandomInt( riddles.size() );
+	while ( random > std::numeric_limits<int>::max() ) {
+		random = m_app->GetRandomInt( riddles.size() );
+	}
+
+	std::cout << random << std::endl;
+	Wt::Dbo::ptr<Riddle> riddle = m_session->find<Riddle>().where( "id = ?" ).bind( static_cast<int>(random) );
 	
 	m_riddle = riddle->m_riddle;
 	m_answer = riddle->m_answer;

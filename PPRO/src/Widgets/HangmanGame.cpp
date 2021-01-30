@@ -15,6 +15,7 @@ HangmanGame::HangmanGame(WebGamesApp* app, Session* session) : m_app(app), m_ses
 
 	addWidget( std::move( title ) );
 	addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/list" ), "list" ) );
+	addWidget( std::make_unique<Wt::WBreak>() );
 	
 //	auto btnCZPtr = std::make_unique<Wt::WPushButton>( "CZ" );
 //	auto btnCZ = btnCZPtr.get();
