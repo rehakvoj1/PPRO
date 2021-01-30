@@ -1,0 +1,11 @@
+.answer{
+	visibility: hidden;
+}
+
+input[class="inputWrong"]{
+	background-color : #ff0000
+}
+
+input[class="inputCorrect"]{
+	background-color : #00ff00
+}

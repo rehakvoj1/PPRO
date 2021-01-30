@@ -73,7 +73,7 @@ void WebGamesApp::HandleInternalPath( const std::string& internalPath ) {
             newWidget = new BullsNCowsGame();
 
         } else if ( internalPath == "/riddles" ) {
-            newWidget = new RiddlesGame();
+            newWidget = new RiddlesGame(this, &m_session);
 
         } else if ( internalPath == "/guessTheSong" ) {
             newWidget = new GuessTheSongGame();

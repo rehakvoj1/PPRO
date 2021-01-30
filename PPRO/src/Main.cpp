@@ -25,6 +25,14 @@ void FillDB() {
 		std::unique_ptr<Word> word{ new Word(str, "en") };
 		Wt::Dbo::ptr<Word> wordPtr = session.add( std::move( word ) );
 	}
+
+	std::ifstream file2( "riddles.txt" );
+	std::string riddleStr;
+	std::string answerStr;
+	while ( std::getline( file2, riddleStr ) && std::getline( file2, answerStr ) ) {
+		std::unique_ptr<Riddle> riddle{ new Riddle( riddleStr, "en", answerStr ) };
+		Wt::Dbo::ptr<Riddle> riddlePtr = session.add( std::move( riddle ) );
+	}
 }
 
 
@@ -33,6 +41,7 @@ std::unique_ptr<Wt::WApplication> createApplication( const Wt::WEnvironment& env
 	auto app = std::make_unique<Wt::WApplication>( env );
 	app->setCssTheme( "bootstrap" );
 	app->useStyleSheet( "css/hangman.css" );
+	app->useStyleSheet( "css/riddles.css" );
 	app->messageResourceBundle().use( "letters" );
 	app->messageResourceBundle().use( "nouns" );
 	app->root()->addWidget( std::make_unique<WebGamesApp>() );

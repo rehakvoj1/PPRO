@@ -20,7 +20,6 @@ public:
         Wt::Dbo::field( a, m_answer, "answer" );
     }
 
-private:
     std::string m_riddle;
     std::string m_lang;
     std::string m_answer;
