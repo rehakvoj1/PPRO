@@ -13,8 +13,13 @@
 HangmanGame::HangmanGame(WebGamesApp* app, Session* session) : m_app(app), m_session(session), m_imageIdx(0) {
 	std::unique_ptr<Wt::WText> title( std::make_unique<Wt::WText>( "<h1>Hangman</h1>" ) );
 
+	// TITLE
 	addWidget( std::move( title ) );
+
+	// GAME LIST LINK
 	addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/list" ), "list" ) );
+	
+	// PARAGRAPH BREAK
 	addWidget( std::make_unique<Wt::WBreak>() );
 	
 //	auto btnCZPtr = std::make_unique<Wt::WPushButton>( "CZ" );
@@ -34,6 +39,7 @@ HangmanGame::HangmanGame(WebGamesApp* app, Session* session) : m_app(app), m_ses
 //		} );
 //	addWidget( std::move( btnENPtr ) );
 
+	// NEW GAME BUTTON
 	auto btnNewGamePtr = std::make_unique<Wt::WPushButton>( "New Game" );
 	auto btnNewGame = btnNewGamePtr.get();
 	btnNewGame->clicked().connect( std::bind(&HangmanGame::NewGame,this) );
@@ -51,6 +57,7 @@ HangmanGame::HangmanGame(WebGamesApp* app, Session* session) : m_app(app), m_ses
 	NewGame();
 }
 
+//=====================================================================
 void HangmanGame::ResolveLetter(Wt::WPushButton* btn) {
 	btn->disable();
 	
@@ -83,6 +90,7 @@ void HangmanGame::ResolveLetter(Wt::WPushButton* btn) {
 	m_hangmanImg->setCurrentIndex( m_imageIdx );
 }
 
+//===============================================================================
 bool HangmanGame::LetterHit( Wt::WPushButton* btn ) {
 	bool hit = false;
 	char letter = std::tolower( btn->text().toUTF8()[0] );
@@ -95,6 +103,7 @@ bool HangmanGame::LetterHit( Wt::WPushButton* btn ) {
 	return hit;
 }
 
+//============================================================
 bool HangmanGame::IsGameWon() {
 	for ( auto& pair : m_hiddenWord ) {
 		if ( !pair.second ) {
@@ -104,10 +113,12 @@ bool HangmanGame::IsGameWon() {
 	return true;
 }
 
+//============================================================
 bool HangmanGame::IsGameLost() {
 	return m_imageIdx == 11;
 }
 
+//============================================================
 void HangmanGame::UpdateHiddenWord() {
 	std::string wordPlaceholder;
 	for ( auto& pair : m_hiddenWord ) {
@@ -122,6 +133,7 @@ void HangmanGame::UpdateHiddenWord() {
 	hiddenWord->setText( wordPlaceholder );
 }
 
+//============================================================
 void HangmanGame::NewRandomWord() {
 	Wt::Dbo::Transaction transaction{ *m_session };
 	typedef Wt::Dbo::collection< Wt::Dbo::ptr<Word> > Words;
@@ -135,6 +147,7 @@ void HangmanGame::NewRandomWord() {
 	}
 }
 
+//=============================================================
 void HangmanGame::NewGame() {
 	m_imageIdx = 0;
 	m_hangmanImg->setCurrentIndex( m_imageIdx );
@@ -155,6 +168,7 @@ void HangmanGame::NewGame() {
 	text->addStyleClass( "hiddenWord" );
 }
 
+//=======================================================================
 void HangmanGame::LoadLetters() {
 	std::istringstream ss( tr( "hangman.letters" ).toUTF8() );
 	char letter;
@@ -167,7 +181,7 @@ void HangmanGame::LoadLetters() {
 	}
 }
 
-
+//================================================================================
 void HangmanGame::LoadImages() {
 	m_hangmanImg = new Wt::WStackedWidget();
 	for ( int i = 0; i < 13; ++i ) {

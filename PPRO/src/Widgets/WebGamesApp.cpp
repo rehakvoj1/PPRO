@@ -18,6 +18,8 @@
 #include "RiddlesGame.h"
 
 WebGamesApp::WebGamesApp() {
+
+    // AUTHENTICATON
     m_session.login().changed().connect( this, &WebGamesApp::OnAuthEvent );
 
     std::unique_ptr<Wt::Auth::AuthModel> authModel
@@ -30,6 +32,7 @@ WebGamesApp::WebGamesApp() {
     authWidget->setModel( std::move( authModel ) );
     authWidget->setRegistrationEnabled( true );
   
+    // CONTAINERS
     m_mainStack = new Wt::WStackedWidget();
     m_gameList = new Wt::WContainerWidget();
   
@@ -48,9 +51,11 @@ WebGamesApp::WebGamesApp() {
     authWidgetPtr->processEnvironment();
 }
 
+//===========================================
 WebGamesApp::~WebGamesApp() {
 }
 
+//====================================================================================
 void WebGamesApp::HandleInternalPath( const std::string& internalPath ) {
     if ( m_session.login().loggedIn() ) {
         auto currentWidget = m_mainStack->currentWidget();
@@ -90,6 +95,7 @@ void WebGamesApp::HandleInternalPath( const std::string& internalPath ) {
     }
 }
 
+//========================================================================
 size_t WebGamesApp::GetRandomInt(size_t max) {
     std::random_device rd;
     std::mt19937 gen( rd() );
@@ -97,7 +103,7 @@ size_t WebGamesApp::GetRandomInt(size_t max) {
     return distrib( gen );
 }
 
-
+//===========================================================================
 void WebGamesApp::OnAuthEvent() {
     if ( m_session.login().loggedIn() ) {
         Wt::Dbo::ptr<User> pPotentialNewUser = nullptr;
@@ -119,6 +125,7 @@ void WebGamesApp::OnAuthEvent() {
     }
 }
 
+//=================================================================================
 void WebGamesApp::ShowPage(Wt::WContainerWidget* app) {
     m_mainStack->setCurrentWidget(app);
     m_mainStack->show();

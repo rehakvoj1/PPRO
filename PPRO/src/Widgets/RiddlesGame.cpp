@@ -11,17 +11,24 @@
 #include <Wt/WBreak.h>
 
 RiddlesGame::RiddlesGame( WebGamesApp* app, Session* session ) : m_app( app ), m_session( session ) {
-	std::unique_ptr<Wt::WText> title( std::make_unique<Wt::WText>( "<h1>Riddles</h1>" ) );
 	
+	// TITLE
+	std::unique_ptr<Wt::WText> title( std::make_unique<Wt::WText>( "<h1>Riddles</h1>" ) );
 	addWidget( std::move( title ) );
+	
+	// LIST OF GAMES LINK
 	addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/list" ), "list" ) );
+	
+	// PARAGRAPH BREAK
 	addWidget( std::make_unique<Wt::WBreak>() );
 	
+	// NEW GAME BUTTON
 	auto btnNewGame = std::make_unique<Wt::WPushButton>( "New Game" );
 	btnNewGame->enterPressed().connect( std::bind( &RiddlesGame::NewGame, this ) );
 	btnNewGame->clicked().connect( std::bind( &RiddlesGame::NewGame, this ) );
 	addWidget( std::move( btnNewGame ) );
 
+	// RIDDLE CONTAINER + FILL
 	m_riddleContainer = new Wt::WContainerWidget();
 	addWidget( std::unique_ptr<Wt::WContainerWidget>( m_riddleContainer ) );
 
@@ -31,6 +38,7 @@ RiddlesGame::RiddlesGame( WebGamesApp* app, Session* session ) : m_app( app ), m
 	m_riddleContainer->widget( 2 )->setStyleClass("answer");
 	addWidget( std::make_unique<Wt::WBreak>() );
 	
+	// USER INPUT
 	m_userInput = new Wt::WLineEdit();
 	m_userInput->enterPressed().connect( std::bind( &RiddlesGame::CheckAnswer, this ) );
 	m_userInput->clicked().connect( [&] {
@@ -43,10 +51,12 @@ RiddlesGame::RiddlesGame( WebGamesApp* app, Session* session ) : m_app( app ), m
 	} );
 	addWidget( std::unique_ptr<Wt::WLineEdit>( m_userInput ) );
 
+	// CONFIRM BUTTON
 	auto btnOK = std::make_unique<Wt::WPushButton>("OK");
 	btnOK->clicked().connect( std::bind( &RiddlesGame::CheckAnswer, this ) );
 	addWidget( std::move( btnOK ) );
 	
+	// SHOW ANSWER BUTTON
 	auto btnSolution = std::make_unique<Wt::WPushButton>("Show Solution");
 	btnSolution->clicked().connect( std::bind( &RiddlesGame::ToggleSolution, this ) );
 	addWidget( std::move( btnSolution ) );
@@ -55,6 +65,7 @@ RiddlesGame::RiddlesGame( WebGamesApp* app, Session* session ) : m_app( app ), m
 	NewGame();
 }
 
+//========================================================================
 void RiddlesGame::NewGame() {
 	if ( !m_riddleContainer->widget( 2 )->hasStyleClass( "answer" ) ) {
 		ToggleSolution();
@@ -68,6 +79,7 @@ void RiddlesGame::NewGame() {
 	static_cast<Wt::WText*>( m_riddleContainer->widget( 2 ) )->setText( m_answer );
 }
 
+//=================================================================================
 void RiddlesGame::NewRandomRiddle() {
 	Wt::Dbo::Transaction transaction{ *m_session };
 	typedef Wt::Dbo::collection< Wt::Dbo::ptr<Riddle> > Riddles;
@@ -85,6 +97,7 @@ void RiddlesGame::NewRandomRiddle() {
 	m_answer = riddle->m_answer;
 }
 
+//==================================================================================
 void RiddlesGame::CheckAnswer() {
 	std::string userAnswer = m_userInput->valueText().toUTF8();
 
@@ -96,6 +109,7 @@ void RiddlesGame::CheckAnswer() {
 	}
 }
 
+//==================================================================================
 void RiddlesGame::ToggleSolution() {
 	if ( m_riddleContainer->widget( 2 )->hasStyleClass("answer") ) {
 		m_riddleContainer->widget( 2 )->removeStyleClass("answer");

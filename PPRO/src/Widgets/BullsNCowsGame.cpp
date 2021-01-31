@@ -18,14 +18,20 @@ BullsNCowsGame::BullsNCowsGame( WebGamesApp* app, Session* session ) :	m_isogram
 																		m_cows( 0 ),
 																		m_app( app ), 
 																		m_session( session ) {
+	// TITLE
 	std::unique_ptr<Wt::WText> title( std::make_unique<Wt::WText>( "<h1>Bulls &amp; Cows</h1>" ) );
-	
 	addWidget( std::move( title ) );
+
+	// LINK TO GAME LIST
 	addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/list" ), "list" ) );
+	
+	// PARAGRAPH BREAK
 	addWidget( std::make_unique<Wt::WBreak>() );
 
+	// NUM OF LETTERS TEXT
 	addWidget( std::make_unique<Wt::WText>( "Number of letters: " ) );
 
+	// NUM OF LETTERS COMBOBOX
 	auto comboBox = new Wt::WComboBox();
 	comboBox->addItem( "3" );
 	comboBox->addItem( "4" );
@@ -34,22 +40,28 @@ BullsNCowsGame::BullsNCowsGame( WebGamesApp* app, Session* session ) :	m_isogram
 	comboBox->changed().connect( [=] { m_isogramLen = std::stoi(comboBox->valueText().toUTF8() ); } );
 	addWidget( std::unique_ptr<Wt::WComboBox>( comboBox ) );
 
+	// NEW GAME BUTTON
 	auto btnNewGame = std::make_unique<Wt::WPushButton>( "New Game" );
 	btnNewGame->clicked().connect( std::bind( &BullsNCowsGame::NewGame, this ) );
 	addWidget( std::move( btnNewGame ) );
 
+	// PARAGRAPH BREAK
 	addWidget( std::make_unique<Wt::WBreak>() );
 
+	// BULLS N COWS TEXT
 	m_bullsCows = new Wt::WText("0 Bull & 0 Cows");
 	m_bullsCows->addStyleClass( "bullsNCows" );
 	addWidget( std::unique_ptr<Wt::WText>( m_bullsCows ) );
+	
+	// PARAGRAPH BREAK
 	addWidget( std::make_unique<Wt::WBreak>() );
 
-
+	// USER INPUT
 	m_userInput = new Wt::WLineEdit();
 	m_userInput->enterPressed().connect( std::bind( &BullsNCowsGame::CheckAnswer, this ) );
 	addWidget( std::unique_ptr<Wt::WLineEdit>( m_userInput ) );
 
+	// CONFIRM BUTTON
 	auto btnOK = std::make_unique<Wt::WPushButton>( "OK" );
 	btnOK->clicked().connect( std::bind( &BullsNCowsGame::CheckAnswer, this ) );
 	addWidget( std::move( btnOK ) );
@@ -58,6 +70,7 @@ BullsNCowsGame::BullsNCowsGame( WebGamesApp* app, Session* session ) :	m_isogram
 	NewGame();
 }
 
+//==================================================
 void BullsNCowsGame::NewGame() {
 	m_bullsCows->setText( "0 Bulls & 0 Cows" );
 	m_userInput->setText( "" );
@@ -71,6 +84,7 @@ void BullsNCowsGame::NewGame() {
 	NewRandomWord();
 }
 
+//======================================================
 bool BullsNCowsGame::IsIsogram( std::string word ) {
 	for ( int i = 0; i < word.length(); ++i ) {
 		for ( int j = i; j < word.length(); ++j ) {
@@ -82,6 +96,7 @@ bool BullsNCowsGame::IsIsogram( std::string word ) {
 	return true;
 }
 
+//=======================================================
 void BullsNCowsGame::CheckAnswer() {
 	// correct letters (cows)
 	// correct positions (bulls)
@@ -117,6 +132,7 @@ void BullsNCowsGame::CheckAnswer() {
 	m_bullsCows->setText( result );
 }
 
+//=======================================================================================
 void BullsNCowsGame::NewRandomWord() {
 	Wt::Dbo::Transaction transaction{ *m_session };
 	typedef Wt::Dbo::collection< Wt::Dbo::ptr<Word> > Words;
