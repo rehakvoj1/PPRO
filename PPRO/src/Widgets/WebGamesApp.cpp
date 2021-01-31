@@ -33,10 +33,10 @@ WebGamesApp::WebGamesApp() {
     m_mainStack = new Wt::WStackedWidget();
     m_gameList = new Wt::WContainerWidget();
   
-    m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/hangman" ) , "hangman" ) );
-    m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/bullsAndCows" ) , "bullsAndCows" ) );
-    m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/riddles" ) , "riddles" ) );
-    m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/guessTheSong" ) , "guessTheSong" ) );
+    m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/hangman" ) , "Hangman" ) );
+    m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/bullsAndCows" ) , "Bullsandcows" ) );
+    m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/riddles" ) , "Riddles" ) );
+    m_gameList->addWidget( std::make_unique<Wt::WAnchor>( Wt::WLink( Wt::LinkType::InternalPath, "/guessTheSong" ) , "Guessthesong" ) );
     
     m_mainStack->addWidget( std::unique_ptr<WContainerWidget>( m_gameList ) );
     m_mainStack->hide();
@@ -74,7 +74,7 @@ void WebGamesApp::HandleInternalPath( const std::string& internalPath ) {
             newWidget = new RiddlesGame( this, &m_session );
 
         } else if ( internalPath == "/guessTheSong" ) {
-            newWidget = new GuessTheSongGame();
+            newWidget = new GuessTheSongGame( this, &m_session );
 
         } else if ( internalPath == "/hangman" ) {
             newWidget = new HangmanGame( this, &m_session );

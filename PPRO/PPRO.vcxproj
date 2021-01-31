@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\DAO\Song.cpp" />
     <ClCompile Include="src\Widgets\BullsNCowsGame.cpp" />
     <ClCompile Include="src\Widgets\GuessTheSongGame.cpp" />
     <ClCompile Include="src\Widgets\HangmanGame.cpp" />
@@ -173,6 +174,7 @@
     <ClCompile Include="src\Widgets\WebGamesApp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\DAO\Song.h" />
     <ClInclude Include="src\Widgets\BullsNCowsGame.h" />
     <ClInclude Include="src\Widgets\GuessTheSongGame.h" />
     <ClInclude Include="src\Widgets\HangmanGame.h" />

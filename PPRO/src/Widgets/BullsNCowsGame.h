@@ -17,7 +17,6 @@ private:
 	int m_isogramLen;
 	int m_bulls;
 	int m_cows;
-	bool m_gameWon;
 	std::string m_hiddenWord;
 
 	Wt::WText* m_bullsCows;

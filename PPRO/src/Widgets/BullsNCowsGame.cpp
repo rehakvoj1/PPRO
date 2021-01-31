@@ -7,6 +7,7 @@
 #include <Wt/WBreak.h>
 #include <Wt/WLineEdit.h>
 #include <Wt/Dbo/Transaction.h>
+#include <Wt/WCssDecorationStyle.h>
 
 #include "../DAO/Word.h"
 #include "../Session.h"
@@ -15,7 +16,6 @@
 BullsNCowsGame::BullsNCowsGame( WebGamesApp* app, Session* session ) :	m_isogramLen( 3 ), 
 																		m_bulls( 0 ), 
 																		m_cows( 0 ),
-																		m_gameWon( false ),
 																		m_app( app ), 
 																		m_session( session ) {
 	std::unique_ptr<Wt::WText> title( std::make_unique<Wt::WText>( "<h1>Bulls &amp; Cows</h1>" ) );
@@ -62,10 +62,12 @@ void BullsNCowsGame::NewGame() {
 	m_bullsCows->setText( "0 Bulls & 0 Cows" );
 	m_userInput->setText( "" );
 	m_userInput->enable();
+	Wt::WCssDecorationStyle style;
+	style.setBackgroundColor( { 255, 255, 255 } );
+	m_userInput->setDecorationStyle( style );
 	m_cows = 0;
 	m_bulls = 0;
-	m_gameWon = false;
-
+	
 	NewRandomWord();
 }
 
@@ -106,7 +108,9 @@ void BullsNCowsGame::CheckAnswer() {
 
 	if ( m_bulls == m_isogramLen ) {
 		m_userInput->disable();
-		m_gameWon = true;
+		Wt::WCssDecorationStyle style;
+		style.setBackgroundColor( { 0, 255, 0 } );
+		m_userInput->setDecorationStyle( style );
 	}
 
 	std::string result = std::to_string( m_bulls ) + " Bulls & " + std::to_string( m_cows ) + " Cows";

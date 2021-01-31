@@ -1,5 +1,6 @@
 #include "Session.h"
 #include "DAO/Riddle.h"
+#include "DAO/Song.h"
 
 #include "Wt/Auth/AuthService.h"
 #include "Wt/Auth/HashFunction.h"
@@ -35,6 +36,7 @@ Session::Session() {
     mapClass<Score>( "score" );
     mapClass<User>( "user" );
     mapClass<Word>( "word" );
+    mapClass<Song>( "song" );
     mapClass<AuthInfo>( "auth_info" );
     mapClass<AuthInfo::AuthIdentityType>( "auth_identity" );
     mapClass<AuthInfo::AuthTokenType>( "auth_token" );

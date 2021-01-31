@@ -12,6 +12,7 @@
 #include "DAO/Score.h"
 #include "DAO/User.h"
 #include "DAO/Word.h"
+#include "DAO/Song.h"
 #include "Widgets/WebGamesApp.h"
 
 
@@ -33,6 +34,14 @@ void FillDB() {
 		std::unique_ptr<Riddle> riddle{ new Riddle( riddleStr, "en", answerStr ) };
 		Wt::Dbo::ptr<Riddle> riddlePtr = session.add( std::move( riddle ) );
 	}
+
+	std::ifstream file3( "songlist.txt" );
+	std::string artistStr;
+	std::string titleStr;
+	while ( std::getline( file3, artistStr ) && std::getline( file3, titleStr ) ) {
+		std::unique_ptr<Song> song{ new Song( artistStr, titleStr ) };
+		Wt::Dbo::ptr<Song> riddlePtr = session.add( std::move( song ) );
+	}
 }
 
 
@@ -43,7 +52,8 @@ std::unique_ptr<Wt::WApplication> createApplication( const Wt::WEnvironment& env
 	app->useStyleSheet( "css/hangman.css" );
 	app->useStyleSheet( "css/riddles.css" );
 	app->useStyleSheet( "css/bullsNCows.css" );
-	app->messageResourceBundle().use( "letters" );
+	app->useStyleSheet( "css/guessTheSong.css" );
+	//app->messageResourceBundle().use( "letters" );
 	app->root()->addWidget( std::make_unique<WebGamesApp>() );
 
 	return app;
