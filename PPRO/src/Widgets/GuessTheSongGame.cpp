@@ -111,7 +111,8 @@ void GuessTheSongGame::NewGame() {
 	m_userInput->removeStyleClass( "inputWrong" );
 	m_userInput->setValueText( "" );
 	Wt::WCssDecorationStyle style;
-	m_userInput->disable();
+	m_userInput->enable();
+	m_userInput->setFocus( true );
 	style.setBackgroundColor( { 255, 255, 255 } );
 	m_userInput->setDecorationStyle( style );
 	
@@ -248,6 +249,7 @@ void GuessTheSongGame::StopSound() {
 
 	if ( m_hintPhase != 3 ) {
 		m_userInput->enable();
+		m_userInput->setFocus( true );
 	}
 }
 

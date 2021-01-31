@@ -73,6 +73,7 @@ void RiddlesGame::NewGame() {
 	m_userInput->removeStyleClass( "inputCorrect" );
 	m_userInput->removeStyleClass( "inputWrong" );
 	m_userInput->setText("");
+	m_userInput->setFocus( true );
 	NewRandomRiddle();
 
 	static_cast<Wt::WText*>( m_riddleContainer->widget( 0 ) )->setText( m_riddle );

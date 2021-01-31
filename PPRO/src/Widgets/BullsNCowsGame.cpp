@@ -75,6 +75,7 @@ void BullsNCowsGame::NewGame() {
 	m_bullsCows->setText( "0 Bulls & 0 Cows" );
 	m_userInput->setText( "" );
 	m_userInput->enable();
+	m_userInput->setFocus();
 	Wt::WCssDecorationStyle style;
 	style.setBackgroundColor( { 255, 255, 255 } );
 	m_userInput->setDecorationStyle( style );
