@@ -81,6 +81,7 @@ void HangmanGame::ResolveLetter(Wt::WPushButton* btn) {
 	}
 
 	if ( gameWon ) {
+		SaveScore();
 		m_imageIdx = 12;
 		for ( auto& it : m_lettersContainer->children() ) {
 			it->disable();
@@ -141,8 +142,8 @@ void HangmanGame::NewRandomWord() {
 	Words words = dao.ReadAll<Word>();
 
 	int random = m_app->GetRandomInt( words.size() );
-	Wt::Dbo::ptr<Word> word = dao.ReadOne<Word>( static_cast<Wt::Dbo::dbo_default_traits::IdType>( random ) );
-	for ( char c : word->m_word ) {
+	m_wordPtr = dao.ReadOne<Word>( static_cast<Wt::Dbo::dbo_default_traits::IdType>( random ) );
+	for ( char c : m_wordPtr->m_word ) {
 		m_hiddenWord.emplace_back( std::pair<char, bool>( c, false ) );
 	}
 }
@@ -192,4 +193,19 @@ void HangmanGame::LoadImages() {
 		m_images.emplace_back( image );
 	}
 	addWidget( std::unique_ptr<Wt::WStackedWidget>( m_hangmanImg ) );
+}
+
+//=============================================================================
+void HangmanGame::SaveScore() {
+	DAO dao( m_session );
+	Wt::Dbo::ptr<Game> game = dao.FindOneByCondition<Game, std::string>( "name = ?", m_gameName );
+	Wt::Dbo::ptr<User> user = dao.FindOneByCondition<User, std::string>( "name = ?", m_app->GetLoggedUserName() );
+
+	std::unique_ptr<Score> score{ new Score() };
+	score->m_guessCnt = m_imageIdx;
+	score->m_game = game;
+	score->m_user = user;
+	score->m_word = m_wordPtr;
+	dao.Create<Score>( std::move( score ) );
+
 }

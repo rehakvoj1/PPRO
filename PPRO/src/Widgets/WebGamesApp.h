@@ -12,6 +12,7 @@ public:
 
 	void HandleInternalPath( const std::string& internalPath );
 	size_t GetRandomInt( size_t max);
+	std::string GetLoggedUserName();
 
 private:
 	void OnAuthEvent();

@@ -3,6 +3,7 @@
 #include <Wt/WImage.h>
 #include <Wt/WStackedWidget.h>
 #include <vector>
+#include "../DAO/Word.h"
 
 class Session;
 class WebGamesApp;
@@ -19,6 +20,7 @@ private:
 	bool IsGameLost();
 	void UpdateHiddenWord();
 	void NewRandomWord();
+	void SaveScore();
 
 	void NewGame();
 	void LoadLetters();
@@ -30,6 +32,7 @@ private:
 
 	int m_imageIdx;
 	std::vector< std::pair<char,bool> > m_hiddenWord;
+	Wt::Dbo::ptr<Word> m_wordPtr;
 
 	Wt::WContainerWidget* m_hiddenWordContainer;
 	Wt::WContainerWidget* m_lettersContainer;

@@ -13,10 +13,13 @@
 #include "../DAO/Word.h"
 #include "../Session.h"
 #include "WebGamesApp.h"
+#include "../DAO/Score.h"
+#include "../DAO/User.h"
 
 BullsNCowsGame::BullsNCowsGame( WebGamesApp* app, Session* session ) :	m_isogramLen( 3 ), 
 																		m_bulls( 0 ), 
 																		m_cows( 0 ),
+																		m_score( 0 ),
 																		m_app( app ), 
 																		m_session( session ),
 																		m_gameName( "BullsNCows" ) {
@@ -104,6 +107,8 @@ void BullsNCowsGame::CheckAnswer() {
 	// correct letters (cows)
 	// correct positions (bulls)
 
+	m_score++;
+
 	std::string userGuess = m_userInput->valueText().toUTF8();
 	m_cows = 0;
 	m_bulls = 0;
@@ -129,6 +134,7 @@ void BullsNCowsGame::CheckAnswer() {
 		Wt::WCssDecorationStyle style;
 		style.setBackgroundColor( { 0, 255, 0 } );
 		m_userInput->setDecorationStyle( style );
+		SaveScore();
 	}
 
 	std::string result = std::to_string( m_bulls ) + " Bulls & " + std::to_string( m_cows ) + " Cows";
@@ -139,7 +145,7 @@ void BullsNCowsGame::CheckAnswer() {
 void BullsNCowsGame::NewRandomWord() {
 	DAO dao( m_session );
 	typedef Wt::Dbo::collection< Wt::Dbo::ptr<Word> > Words;
-	Words words = dao.FindByCondition<Word, int>( "length = ?", m_isogramLen );
+	Words words = dao.FindCollectionByCondition<Word, int>( "length = ?", m_isogramLen );
 	
 	Wt::Dbo::Transaction transaction{ *m_session };
 	std::vector< Wt::Dbo::ptr<Word> > wordsOfLen;
@@ -147,12 +153,27 @@ void BullsNCowsGame::NewRandomWord() {
 		wordsOfLen.emplace_back( *it );
 	}
 
-	Wt::Dbo::ptr<Word> word = nullptr;
+	
 	int random = 0;
 	do {
 		random = static_cast<int>( m_app->GetRandomInt( words.size() ) );
-		word = wordsOfLen[random];
-	} while ( !IsIsogram( word->m_word ) );
+		m_wordPtr = wordsOfLen[random];
+	} while ( !IsIsogram( m_wordPtr->m_word ) );
 
-	m_hiddenWord = word->m_word;	
+	m_hiddenWord = m_wordPtr->m_word;
+}
+
+//===============================================================================
+void BullsNCowsGame::SaveScore() {
+	DAO dao( m_session );
+	Wt::Dbo::ptr<Game> game = dao.FindOneByCondition<Game, std::string>( "name = ?", m_gameName );
+	Wt::Dbo::ptr<User> user = dao.FindOneByCondition<User, std::string>( "name = ?", m_app->GetLoggedUserName() );
+
+	std::unique_ptr<Score> score{ new Score() };
+	score->m_guessCnt = m_score;
+	score->m_game = game;
+	score->m_user = user;
+	score->m_word = m_wordPtr;
+	dao.Create<Score>(std::move(score));
+
 }

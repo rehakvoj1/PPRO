@@ -103,6 +103,10 @@ size_t WebGamesApp::GetRandomInt(size_t max) {
     return distrib( gen );
 }
 
+std::string WebGamesApp::GetLoggedUserName() {
+    return m_session.login().user().identity( Wt::Auth::Identity::LoginName ).toUTF8();
+}
+
 //===========================================================================
 void WebGamesApp::OnAuthEvent() {
     if ( m_session.login().loggedIn() ) {

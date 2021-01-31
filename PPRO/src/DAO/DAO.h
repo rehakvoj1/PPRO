@@ -10,19 +10,19 @@ public:
 	DAO(Session* session) : m_session(session){ }
 
 	template <class T>
-	T* Create( std::unique_ptr<T> objPtr ) {
+	Wt::Dbo::ptr<T> Create( std::unique_ptr<T> objPtr ) {
 		Wt::Dbo::Transaction transaction{ *m_session };
 		Wt::Dbo::ptr<T> obj = m_session->add( std::move( objPtr ) );
 
-		return obj->get();
+		return obj;
 	}
 	template <class T>
-	T* Update( Wt::Dbo::dbo_default_traits::IdType id, std::unique_ptr<T> newObj ) {
+	Wt::Dbo::ptr<T> Update( Wt::Dbo::dbo_default_traits::IdType id, std::unique_ptr<T> newObj ) {
 		Wt::Dbo::Transaction transaction{ *m_session };
 		Wt::Dbo::ptr<T> obj = m_session->find<T>().where( "id = ?" ).bind( id );
 		auto toModify = obj.modify();
 		toModify = newObj;
-
+		return toModify;
 	}
 
 	template <class T>
@@ -43,7 +43,7 @@ public:
 	}
 
 	template <class T, class U>
-	Wt::Dbo::collection< Wt::Dbo::ptr<T> > FindByCondition(std::string whereClause, U whereCondition ) {
+	Wt::Dbo::collection< Wt::Dbo::ptr<T> > FindCollectionByCondition(std::string whereClause, U whereCondition ) {
 		Wt::Dbo::Transaction transaction{ *m_session };
 		Wt::Dbo::collection< Wt::Dbo::ptr<T> > objects;
 		objects = m_session->find<T>().where( whereClause ).bind( whereCondition );
@@ -51,6 +51,15 @@ public:
 		return objects;
 	}
 	
+	template <class T, class U>
+	Wt::Dbo::ptr<T> FindOneByCondition( std::string whereClause, U whereCondition ) {
+		Wt::Dbo::Transaction transaction{ *m_session };
+		Wt::Dbo::ptr<T> object;
+		object = m_session->find<T>().where( whereClause ).bind( whereCondition );
+
+		return object;
+	}
+
 	template<class T>
 	bool Delete(Wt::Dbo::dbo_default_traits::IdType id) {
 		Wt::Dbo::Transaction transaction{ *m_session };

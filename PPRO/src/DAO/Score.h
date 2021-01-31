@@ -27,7 +27,6 @@ public:
         Wt::Dbo::belongsTo( a, m_word, "word" );
     }
 
-private:
     int m_guessCnt;
     Wt::Dbo::ptr<Game> m_game;
     Wt::Dbo::ptr<User> m_user;

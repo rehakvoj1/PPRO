@@ -42,6 +42,18 @@ void FillDB() {
 		std::unique_ptr<Song> song{ new Song( artistStr, titleStr ) };
 		Wt::Dbo::ptr<Song> riddlePtr = session.add( std::move( song ) );
 	}
+
+	std::unique_ptr<Game> hangman{ new Game( "Hangman", "Try not to hang!" ) };
+	Wt::Dbo::ptr<Game> hangmanPtr = session.add( std::move( hangman ) );
+
+	std::unique_ptr<Game> BullsNCows{ new Game( "BullsNCows", "Weee!!! Animals!!" ) };
+	Wt::Dbo::ptr<Game> BullsNCowsPtr = session.add( std::move( BullsNCows ) );
+
+	std::unique_ptr<Game> riddles{ new Game( "Riddles", "That is the riddle!" ) };
+	Wt::Dbo::ptr<Game> riddlesPtr = session.add( std::move( riddles ) );
+
+	std::unique_ptr<Game> guessTheSong{ new Game( "GuessTheSong", "Daba Deee Daba dAAA!!!" ) };
+	Wt::Dbo::ptr<Game> guessTheSongPtr = session.add( std::move( guessTheSong ) );
 }
 
 
@@ -53,7 +65,6 @@ std::unique_ptr<Wt::WApplication> createApplication( const Wt::WEnvironment& env
 	app->useStyleSheet( "css/riddles.css" );
 	app->useStyleSheet( "css/bullsNCows.css" );
 	app->useStyleSheet( "css/guessTheSong.css" );
-	//app->messageResourceBundle().use( "letters" );
 	app->root()->addWidget( std::make_unique<WebGamesApp>() );
 
 	return app;

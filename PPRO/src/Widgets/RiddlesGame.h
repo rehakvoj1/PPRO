@@ -18,6 +18,7 @@ private:
 
 	std::string m_gameName;
 
+	int m_score;
 	std::string m_riddle;
 	std::string m_answer;
 
