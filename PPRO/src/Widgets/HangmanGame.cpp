@@ -3,12 +3,17 @@
 #include <chrono>
 #include <random>
 
+#include "../DAO/User.h"
+#include "../DAO/Word.h"
 #include "../DAO/DAO.h"
 #include <Wt/WText.h>
 #include <Wt/WAnchor.h>
 #include <Wt/WPushButton.h>
+#include <Wt/WBreak.h>
+#include <Wt/WDialog.h>
 #include <Wt/WApplication.h>
 #include "WebGamesApp.h"
+#include <Wt/Dbo/Transaction.h>
 
 
 HangmanGame::HangmanGame(WebGamesApp* app, Session* session) : m_app(app), m_session(session), m_imageIdx(0), m_gameName( "Hangman" ){
@@ -46,6 +51,12 @@ HangmanGame::HangmanGame(WebGamesApp* app, Session* session) : m_app(app), m_ses
 	btnNewGame->clicked().connect( std::bind(&HangmanGame::NewGame,this) );
 	addWidget( std::move( btnNewGamePtr ) );
 	
+	// HIGH SCORES BUTTON
+	auto btnHighScorePtr = std::make_unique<Wt::WPushButton>( "High Scores" );
+	auto btnHighScore = btnHighScorePtr.get();
+	btnHighScore->clicked().connect( std::bind( &HangmanGame::ShowHighScores, this ) );
+	addWidget( std::move( btnHighScorePtr ) );
+
 	m_hiddenWordContainer = new Wt::WContainerWidget();
 	m_lettersContainer = new Wt::WContainerWidget();
 	
@@ -208,4 +219,35 @@ void HangmanGame::SaveScore() {
 	score->m_word = m_wordPtr;
 	dao.Create<Score>( std::move( score ) );
 
+}
+
+//==============================================================================
+void HangmanGame::ShowHighScores() {
+	DAO dao( m_session );
+	Wt::Dbo::Transaction transaction { *m_session };
+	auto game = dao.FindOneByCondition<Game, std::string>( "name = ?", m_gameName );
+	auto scores = dao.FindCollectionByCondition<Score,int>( "game_id = ?", static_cast<int>(game.id()) );
+
+	auto dialog = this->addChild( std::make_unique<Wt::WDialog>( "HighScores" ) );
+	
+	for ( auto& score : scores ) {
+		auto user = dao.ReadOne<User>( score->m_user.id() );
+		auto word = dao.ReadOne<Word>( score->m_word.id() );
+		dialog->contents()->addNew<Wt::WText>( user->m_name + ": " + word->m_word + " | " + std::to_string( score->m_guessCnt ) );
+		dialog->contents()->addNew<Wt::WBreak>();
+	}
+
+	Wt::WPushButton* ok =
+		dialog->footer()->addNew<Wt::WPushButton>( "OK" );
+	ok->setDefault( true );
+
+	ok->clicked().connect( [=] {
+			dialog->accept();
+	} );
+
+	dialog->finished().connect( [=] {
+		this->removeChild( dialog );
+	} );
+
+	dialog->show();
 }

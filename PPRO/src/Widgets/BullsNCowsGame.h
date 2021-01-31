@@ -15,6 +15,7 @@ private:
 	void CheckAnswer();
 	void NewRandomWord();
 	void SaveScore();
+	void ShowHighScores();
 
 	std::string m_gameName;
 

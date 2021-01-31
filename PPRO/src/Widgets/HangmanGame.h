@@ -21,6 +21,7 @@ private:
 	void UpdateHiddenWord();
 	void NewRandomWord();
 	void SaveScore();
+	void ShowHighScores();
 
 	void NewGame();
 	void LoadLetters();
