@@ -3,6 +3,7 @@
 #include <chrono>
 #include <random>
 
+#include "../DAO/DAO.h"
 #include <Wt/WText.h>
 #include <Wt/WAnchor.h>
 #include <Wt/WPushButton.h>
@@ -135,13 +136,12 @@ void HangmanGame::UpdateHiddenWord() {
 
 //============================================================
 void HangmanGame::NewRandomWord() {
-	Wt::Dbo::Transaction transaction{ *m_session };
+	DAO dao( m_session );
 	typedef Wt::Dbo::collection< Wt::Dbo::ptr<Word> > Words;
-	Words words = m_session->find<Word>();
+	Words words = dao.ReadAll<Word>();
 
 	int random = m_app->GetRandomInt( words.size() );
-	Wt::Dbo::ptr<Word> word = m_session->find<Word>().where( "id = ?" ).bind( random );
-
+	Wt::Dbo::ptr<Word> word = dao.ReadOne<Word>( static_cast<Wt::Dbo::dbo_default_traits::IdType>( random ) );
 	for ( char c : word->m_word ) {
 		m_hiddenWord.emplace_back( std::pair<char, bool>( c, false ) );
 	}

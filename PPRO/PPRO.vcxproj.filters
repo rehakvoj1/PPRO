@@ -14,6 +14,7 @@
     <ClCompile Include="src\Widgets\RiddlesGame.cpp" />
     <ClCompile Include="src\Widgets\WebGamesApp.cpp" />
     <ClCompile Include="src\DAO\Song.cpp" />
+    <ClCompile Include="src\DAO\DAO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Session.h" />
@@ -28,5 +29,6 @@
     <ClInclude Include="src\Widgets\RiddlesGame.h" />
     <ClInclude Include="src\Widgets\WebGamesApp.h" />
     <ClInclude Include="src\DAO\Song.h" />
+    <ClInclude Include="src\DAO\DAO.h" />
   </ItemGroup>
 </Project>

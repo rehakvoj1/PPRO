@@ -9,6 +9,7 @@
 #include <Wt/Dbo/Transaction.h>
 #include <Wt/WCssDecorationStyle.h>
 
+#include "../DAO/DAO.h"
 #include "../DAO/Word.h"
 #include "../Session.h"
 #include "WebGamesApp.h"
@@ -136,10 +137,11 @@ void BullsNCowsGame::CheckAnswer() {
 
 //=======================================================================================
 void BullsNCowsGame::NewRandomWord() {
-	Wt::Dbo::Transaction transaction{ *m_session };
+	DAO dao( m_session );
 	typedef Wt::Dbo::collection< Wt::Dbo::ptr<Word> > Words;
-	Words words = m_session->find<Word>().where( "length = ?" ).bind( m_isogramLen );
+	Words words = dao.FindByCondition<Word, int>( "length = ?", m_isogramLen );
 	
+	Wt::Dbo::Transaction transaction{ *m_session };
 	std::vector< Wt::Dbo::ptr<Word> > wordsOfLen;
 	for ( auto it = words.begin(); it != words.end(); ++it ) {
 		wordsOfLen.emplace_back( *it );

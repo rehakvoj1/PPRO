@@ -2,6 +2,7 @@
 #include "../Session.h"
 #include "../DAO/Song.h"
 #include "WebGamesApp.h"
+#include "../DAO/DAO.h"
 
 #include <thread>
 #include <chrono>
@@ -79,12 +80,14 @@ GuessTheSongGame::GuessTheSongGame( WebGamesApp* app, Session* session ) :	m_app
 	m_userInput->setWidth( 300 );
 	m_userInput->enterPressed().connect( std::bind( &GuessTheSongGame::CheckAnswer, this ) );
 	m_userInput->clicked().connect( [&] {
-		if ( m_userInput->hasStyleClass( "inputWrong" ) ) {
-			m_userInput->removeStyleClass( "inputWrong" );
-		}
-		if ( m_userInput->hasStyleClass( "inputCorrect" ) ) {
-			m_userInput->removeStyleClass( "inputCorrect" );
-		}
+		Wt::WCssDecorationStyle style;
+		style.setBackgroundColor( { 255, 255, 255 } );
+		m_userInput->setDecorationStyle( style );
+	} );
+	m_userInput->textInput().connect( [&] {
+		Wt::WCssDecorationStyle style;
+		style.setBackgroundColor( { 255, 255, 255 } );
+		m_userInput->setDecorationStyle( style );
 	} );
 	addWidget( std::unique_ptr<Wt::WLineEdit>( m_userInput ) );
 
@@ -143,24 +146,21 @@ void GuessTheSongGame::CheckAnswer() {
 		GameEnd();
 		PlaySound();
 	} else {
-		m_userInput->setStyleClass( "inputWrong" );
+		Wt::WCssDecorationStyle style;
+		style.setBackgroundColor( { 255, 0, 0 } );
+		m_userInput->setDecorationStyle( style );
 	}
 
 }
 
 //=============================================================
 void GuessTheSongGame::NewRandomSong() {
-	Wt::Dbo::Transaction transaction{ *m_session };
+	DAO dao( m_session );
 	typedef Wt::Dbo::collection< Wt::Dbo::ptr<Song> > Songs;
-	Songs songs = m_session->find<Song>();
+	Songs songs = dao.ReadAll<Song>();
 
 	size_t random = m_app->GetRandomInt( songs.size() );
-	while ( random > std::numeric_limits<int>::max() ) {
-		random = m_app->GetRandomInt( songs.size() );
-	}
-
-	std::cout << random << std::endl;
-	Wt::Dbo::ptr<Song> song = m_session->find<Song>().where( "id = ?" ).bind( static_cast<int>( random ) );
+	Wt::Dbo::ptr<Song> song = dao.ReadOne<Song>( static_cast<Wt::Dbo::dbo_default_traits::IdType>( random ) );
 
 	m_artist->setText( song->m_artist );
 	m_songWidget->setText( song->m_title );
@@ -171,9 +171,7 @@ void GuessTheSongGame::NewRandomSong() {
 	m_songPath = "resources/songs/" + song->m_artist + "_" + song->m_title + ".mp3";
 	m_song = m_songContainer->addNew<Wt::WAudio>();
 	m_song->addSource( Wt::WLink( m_songPath ) );
-	m_song->ended().connect( std::bind( &GuessTheSongGame::StopSound, this ) );
-	
-	
+	m_song->ended().connect( std::bind( &GuessTheSongGame::StopSound, this ) );	
 }
 
 //==========================================================
