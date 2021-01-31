@@ -17,7 +17,8 @@ BullsNCowsGame::BullsNCowsGame( WebGamesApp* app, Session* session ) :	m_isogram
 																		m_bulls( 0 ), 
 																		m_cows( 0 ),
 																		m_app( app ), 
-																		m_session( session ) {
+																		m_session( session ),
+																		m_gameName( "BullsNCows" ) {
 	// TITLE
 	std::unique_ptr<Wt::WText> title( std::make_unique<Wt::WText>( "<h1>Bulls &amp; Cows</h1>" ) );
 	addWidget( std::move( title ) );

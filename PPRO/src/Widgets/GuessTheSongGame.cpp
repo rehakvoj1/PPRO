@@ -17,7 +17,8 @@
 GuessTheSongGame::GuessTheSongGame( WebGamesApp* app, Session* session ) :	m_app( app ), 
 																			m_session( session ),
 																			m_hintPhase( 0 ),
-																			m_gameWon( false ) {
+																			m_gameWon( false ),
+																			m_gameName( "GuessTheSong" ) {
 	// TITLE
 	std::unique_ptr<Wt::WText> title( std::make_unique<Wt::WText>( "<h1>Guess the Song</h1>" ) );
 	addWidget( std::move( title ) );

@@ -24,6 +24,8 @@ private:
 	void LoadLetters();
 	void LoadImages();
 
+	std::string m_gameName;
+
 	std::vector<Wt::WImage*> m_images;
 
 	int m_imageIdx;

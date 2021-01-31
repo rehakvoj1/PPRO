@@ -23,6 +23,8 @@ private:
 	void PlaySound();
 	void StopSound();
 	
+	std::string m_gameName;
+
 	std::string m_songName;
 	std::string m_songPath;
 	int m_hintPhase;

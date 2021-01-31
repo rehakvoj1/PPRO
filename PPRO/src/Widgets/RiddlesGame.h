@@ -16,6 +16,8 @@ private:
 	void CheckAnswer();
 	void ToggleSolution();
 
+	std::string m_gameName;
+
 	std::string m_riddle;
 	std::string m_answer;
 

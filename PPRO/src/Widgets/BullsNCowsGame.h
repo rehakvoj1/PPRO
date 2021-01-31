@@ -14,6 +14,8 @@ private:
 	void CheckAnswer();
 	void NewRandomWord();
 
+	std::string m_gameName;
+
 	int m_isogramLen;
 	int m_bulls;
 	int m_cows;

@@ -10,7 +10,7 @@
 #include <Wt/WPushButton.h>
 #include <Wt/WBreak.h>
 
-RiddlesGame::RiddlesGame( WebGamesApp* app, Session* session ) : m_app( app ), m_session( session ) {
+RiddlesGame::RiddlesGame( WebGamesApp* app, Session* session ) : m_app( app ), m_session( session ), m_gameName( "Riddles" ){
 	
 	// TITLE
 	std::unique_ptr<Wt::WText> title( std::make_unique<Wt::WText>( "<h1>Riddles</h1>" ) );

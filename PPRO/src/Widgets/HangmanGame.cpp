@@ -10,7 +10,7 @@
 #include "WebGamesApp.h"
 
 
-HangmanGame::HangmanGame(WebGamesApp* app, Session* session) : m_app(app), m_session(session), m_imageIdx(0) {
+HangmanGame::HangmanGame(WebGamesApp* app, Session* session) : m_app(app), m_session(session), m_imageIdx(0), m_gameName( "Hangman" ){
 	std::unique_ptr<Wt::WText> title( std::make_unique<Wt::WText>( "<h1>Hangman</h1>" ) );
 
 	// TITLE
