@@ -7,11 +7,12 @@ class Session;
 
 class BullsNCowsGame : public Wt::WContainerWidget {
 public:
+	BullsNCowsGame(){ }
 	BullsNCowsGame( WebGamesApp* app, Session* session );
+	bool IsIsogram( std::string word );
 
 private:
 	void NewGame();
-	bool IsIsogram( std::string word );
 	void CheckAnswer();
 	void NewRandomWord();
 	void SaveScore();

@@ -10,6 +10,7 @@
 #include <Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WBreak.h>
+#include <Wt/WCssDecorationStyle.h>
 
 RiddlesGame::RiddlesGame( WebGamesApp* app, Session* session ) : m_app( app ), m_session( session ), m_gameName( "Riddles" ){
 	
@@ -41,7 +42,7 @@ RiddlesGame::RiddlesGame( WebGamesApp* app, Session* session ) : m_app( app ), m
 	
 	// USER INPUT
 	m_userInput = new Wt::WLineEdit();
-	m_userInput->enterPressed().connect( std::bind( &RiddlesGame::CheckAnswer, this ) );
+	m_userInput->enterPressed().connect( std::bind( &RiddlesGame::processInput, this ) );
 	m_userInput->clicked().connect( [&] {
 		if ( m_userInput->hasStyleClass( "inputWrong" ) ) {
 			m_userInput->removeStyleClass( "inputWrong" );
@@ -54,7 +55,7 @@ RiddlesGame::RiddlesGame( WebGamesApp* app, Session* session ) : m_app( app ), m
 
 	// CONFIRM BUTTON
 	auto btnOK = std::make_unique<Wt::WPushButton>("OK");
-	btnOK->clicked().connect( std::bind( &RiddlesGame::CheckAnswer, this ) );
+	btnOK->clicked().connect( std::bind( &RiddlesGame::processInput, this ) );
 	addWidget( std::move( btnOK ) );
 	
 	// SHOW ANSWER BUTTON
@@ -68,13 +69,12 @@ RiddlesGame::RiddlesGame( WebGamesApp* app, Session* session ) : m_app( app ), m
 
 //========================================================================
 void RiddlesGame::NewGame() {
-	if ( !m_riddleContainer->widget( 2 )->hasStyleClass( "answer" ) ) {
-		ToggleSolution();
-	}
-	m_userInput->removeStyleClass( "inputCorrect" );
-	m_userInput->removeStyleClass( "inputWrong" );
+	Wt::WCssDecorationStyle style;
+	style.setBackgroundColor( { 255,255,255 } );
+	m_userInput->setDecorationStyle( style );
 	m_userInput->setText("");
 	m_userInput->setFocus( true );
+	m_riddleContainer->widget( 2 )->setStyleClass( "answer" );
 	NewRandomRiddle();
 
 	static_cast<Wt::WText*>( m_riddleContainer->widget( 0 ) )->setText( m_riddle );
@@ -99,24 +99,33 @@ void RiddlesGame::NewRandomRiddle() {
 	m_answer = riddle->m_answer;
 }
 
-//==================================================================================
-void RiddlesGame::CheckAnswer() {
+//======================================================
+void RiddlesGame::processInput() {
 	std::string userAnswer = m_userInput->valueText().toUTF8();
-
-	if ( userAnswer == m_answer ) {
-		m_userInput->setStyleClass( "inputCorrect" );
+	if ( CheckAnswer( userAnswer ) ) {
+		Wt::WCssDecorationStyle style;
+		style.setBackgroundColor( { 0,255,0 });
+		m_userInput->setDecorationStyle( style );
 		ToggleSolution();
 	} else {
-		m_userInput->setStyleClass( "inputWrong" );
+		Wt::WCssDecorationStyle style;
+		style.setBackgroundColor( { 255,0,0 } );
+		m_userInput->setDecorationStyle( style );
 	}
 }
 
-//==================================================================================
 void RiddlesGame::ToggleSolution() {
-	if ( m_riddleContainer->widget( 2 )->hasStyleClass("answer") ) {
-		m_riddleContainer->widget( 2 )->removeStyleClass("answer");
-	} else {
-		m_riddleContainer->widget( 2 )->setStyleClass("answer");
-	}
+	m_riddleContainer->widget( 2 )->removeStyleClass( "answer" );
+	m_userInput->removeStyleClass( "inputCorrect" );
+}
+
+//==================================================================================
+bool RiddlesGame::CheckAnswer(std::string input) {
 	
+
+	if ( input == m_answer ) {
+		return true;
+	} else {
+		return false;
+	}
 }

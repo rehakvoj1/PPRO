@@ -15,7 +15,6 @@
 #include "DAO/Song.h"
 #include "Widgets/WebGamesApp.h"
 
-
 void FillDB() {
 	Session session;
 	Wt::Dbo::Transaction transaction{ session };

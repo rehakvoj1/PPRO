@@ -7,13 +7,14 @@ class WebGamesApp;
 
 class RiddlesGame : public Wt::WContainerWidget {
 public:
+	RiddlesGame( std::string answer ) : m_answer( answer ) { }
 	RiddlesGame( WebGamesApp* app, Session* session );
 
+	bool CheckAnswer(std::string input);
 private:
 	void NewGame();
 	void NewRandomRiddle();
-
-	void CheckAnswer();
+	void processInput();
 	void ToggleSolution();
 
 	std::string m_gameName;

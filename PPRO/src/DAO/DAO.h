@@ -16,14 +16,6 @@ public:
 
 		return obj;
 	}
-	template <class T>
-	Wt::Dbo::ptr<T> Update( Wt::Dbo::dbo_default_traits::IdType id, std::unique_ptr<T> newObj ) {
-		Wt::Dbo::Transaction transaction{ *m_session };
-		Wt::Dbo::ptr<T> obj = m_session->find<T>().where( "id = ?" ).bind( id );
-		auto toModify = obj.modify();
-		toModify = newObj;
-		return toModify;
-	}
 
 	template <class T>
 	Wt::Dbo::ptr<T> ReadOne( Wt::Dbo::dbo_default_traits::IdType id ) {
